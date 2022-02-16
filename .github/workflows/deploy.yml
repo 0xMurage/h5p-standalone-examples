@@ -1,0 +1,35 @@
+name: GitHub Pages Deployment
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+        name: Checkout
+
+      - name: Download and prepare the latest H5P bundle
+        run: |
+            curl -s https://api.github.com/repos/tunapanda/h5p-standalone/releases/latest | \
+              grep -E 'browser_download_url'| cut -d '"' -f 4| \
+              xargs wget -q -O latest.zip && unzip -qqn latest.zip
+
+      - name: Unzip the files
+        run: |
+          unzip -qqn ./workspace/course-presentation.h5p -d  ./workspace/course-presentation
+          unzip -qqn ./workspace/interactive-book.h5p -d  ./workspace/interactive-book
+          unzip -qqn ./workspace/true-false-question.h5p -d  ./workspace/true-false-question
+
+      - name: Cleanup files that should not be deployed
+        run: |
+            rm latest.zip README.md ./workspace/course-presentation.h5p ./workspace/interactive-book.h5p
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+          publish_branch: main
