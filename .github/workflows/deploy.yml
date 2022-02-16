@@ -18,7 +18,7 @@ jobs:
             xargs wget -q -O latest.zip && unzip -qqn latest.zip
 
       - name: Dex
-        run: ls -al
+        run: ls -al dist
 
       - name: Unzip the files
         run: |
@@ -31,7 +31,7 @@ jobs:
             rm latest.zip README.md ./workspace/course-presentation.h5p ./workspace/interactive-book.h5p
 
       - name: dox
-        run: ls -al
+        run: ls -al dist
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
