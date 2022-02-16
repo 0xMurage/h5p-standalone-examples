@@ -12,8 +12,13 @@ jobs:
         name: Checkout
 
       - name: Download and prepare the latest H5P bundle
-        run: |
-          curl -s https://api.github.com/repos/tunapanda/h5p-standalone/releases/latest |  grep -E 'browser_download_url'| cut -d '"' -f 4|  xargs wget -q -O latest.zip && unzip -qqn latest.zip
+        run: >
+            curl -s https://api.github.com/repos/tunapanda/h5p-standalone/releases/latest |
+            grep -E 'browser_download_url'| cut -d '"' -f 4 | 
+            xargs wget -q -O latest.zip && unzip -qqn latest.zip
+
+      - name: Dex
+        run: ls -al
 
       - name: Unzip the files
         run: |
@@ -23,7 +28,7 @@ jobs:
 
       - name: Cleanup files that should not be deployed
         run: |
-          rm latest.zip README.md ./workspace/course-presentation.h5p ./workspace/interactive-book.h5p
+            rm latest.zip README.md ./workspace/course-presentation.h5p ./workspace/interactive-book.h5p
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
