@@ -30,6 +30,8 @@ jobs:
         run: |
             rm latest.zip README.md ./workspace/course-presentation.h5p ./workspace/interactive-book.h5p
 
+      - name: dox
+        run: ls -al
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
