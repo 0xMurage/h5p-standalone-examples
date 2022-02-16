@@ -17,9 +17,6 @@ jobs:
             grep -E 'browser_download_url'| cut -d '"' -f 4 | 
             xargs wget -q -O latest.zip && unzip -qqn latest.zip
 
-      - name: Dex
-        run: ls -al dist
-
       - name: Unzip the files
         run: |
           unzip -qqn ./workspace/course-presentation.h5p -d  ./workspace/course-presentation
@@ -30,8 +27,6 @@ jobs:
         run: |
             rm latest.zip README.md ./workspace/course-presentation.h5p ./workspace/interactive-book.h5p
 
-      - name: dox
-        run: ls -al dist
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
