@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>xAPI events Demo | H5P Standalone examples</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
+
+    <!--   script to nicely format the json print -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-sm navbar-dark bg-success">
+    <div class="container-fluid">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">Simple H5P Demo</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="restore-local-progress.html">Restore Local Progress
+                    Demo</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="custom-css.html">Custom CSS Demo</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="xapi-events.html">xAPI events Demo</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+<div class="row container-fluid">
+    <div class="col-5 border border-primary mx-auto mt-5">
+
+        <!-- This is the main element we need. It's the H5P player anchor -->
+        <div id="h5p-container"></div>
+
+    </div>
+    <div class="col-6 mx-auto mt-5 border  border-dark">
+        <h6 class="pt-3">Logging events here, but you should send them to a Learning Record
+            Store</h6>
+        <i>To see events, interact with the H5P content</i>
+        <hr class="mb-2">
+
+        <div id="h5p-events" style="max-height: 300px;overflow-y: scroll;"></div>
+
+    </div>
+</div>
+
+
+<!--The main bundle must be included first before the logic below-->
+<script src="./dist/main.bundle.js"></script>
+
+<script>
+    // Get the H5P player anchor element
+    const playerElem = document.querySelector('#h5p-container');
+
+    if (playerElem) { //ensure the anchor exist
+
+        const options = {
+            h5pJsonPath: './workspace/course-presentation',
+            frameJs: './dist/frame.bundle.js',
+            frameCss: './dist/styles/h5p.css'
+        };
+
+        new H5PStandalone.H5P(playerElem, options)
+            .then(function () {
+
+
+                H5P.externalDispatcher.on("xAPI", (event) => {
+
+                    console.log("xAPI event: ", event);
+
+                    //call function to display the event. You should do something more useful
+                    loggEvent(event)
+                });
+            });
+    }
+
+
+    const root = document.querySelector('#h5p-events'); //placing this outside to "speed" up the process
+    function loggEvent(event) {
+        if (root) {
+            const codeWrapper =document.createElement('div');
+            codeWrapper.classList.add('border', 'border-danger','mb-3')
+
+            const code = document.createElement('code');
+            code.innerText = JSON.stringify(event);
+            code.classList.add('prettyprint')
+            codeWrapper.append(code)
+
+            root.prepend(codeWrapper);
+        }
+    }
+
+
+</script>
+
+
+</body>
+</html>

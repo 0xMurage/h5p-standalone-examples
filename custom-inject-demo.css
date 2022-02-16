@@ -1,0 +1,19 @@
+/**Just make sure you are styling the correct element. Be specific whenever possible. */
+
+.h5p-container .h5p-interactive-book-cover-title {
+    color: purple;
+}
+
+.h5p-interactive-book-cover-description {
+    color: teal;
+}
+
+html.h5p-iframe .h5p-interactive-book-cover-readbutton button {
+    background-color: red;
+}
+
+
+/* Changes on second page*/
+.h5p-interactive-book-chapter.h5p-column .h5p-column-content h2 {
+    border-bottom: solid 10px green;
+}
